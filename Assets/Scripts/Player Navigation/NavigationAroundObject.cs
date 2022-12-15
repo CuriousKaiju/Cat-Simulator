@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class NavigationAroundObject : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class NavigationAroundObject : MonoBehaviour
 
     private bool _isFingerOnTheScreen;
     private bool _needRotate;
+    public bool _externalRotationPhase;
 
     private float _timePassed;
     private float _pitch = 0.0f;
@@ -36,6 +38,13 @@ public class NavigationAroundObject : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            if(!_externalRotationPhase)
+            {
+                SetPitchAndYaw();
+                DOTween.KillAll();
+                _externalRotationPhase = false;
+            }
+
             if (!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
             {
                 _isFingerOnTheScreen = true;
@@ -100,5 +109,11 @@ public class NavigationAroundObject : MonoBehaviour
         _pitch = Mathf.Clamp(_pitch, -27, 70);
 
         transform.eulerAngles = new Vector3(_pitch, _yaw, 0.0f);
+    }
+
+    public void SetPitchAndYaw()
+    {
+        _pitch = transform.eulerAngles.x;
+        _yaw = transform.eulerAngles.y;
     }
 }

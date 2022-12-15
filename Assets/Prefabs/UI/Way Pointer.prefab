@@ -120,7 +120,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7320020912629518018}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3731289870182932560}
+        m_TargetAssemblyTypeName: PointerIcon, Assembly-CSharp
+        m_MethodName: RotateCameraToTheWayPointer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7320020912963623308
 GameObject:
   m_ObjectHideFlags: 0
@@ -171,4 +183,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d367310dc2b3b8844bac5de224e8ced1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _button: {fileID: 7320020912629518029}
   _image: {fileID: 7320020912629518018}
+  _rotationTime: 1
+  _pawPointer: {fileID: 0}
+  _cameraTarget: {fileID: 0}
+  _player: {fileID: 0}

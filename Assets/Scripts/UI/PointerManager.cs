@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class PointerManager : MonoBehaviour {
 
-    [SerializeField] PointerIcon _pointerPrefab;
+    [SerializeField] private PointerIcon _pointerPrefab;
     private Dictionary<PawPointer, PointerIcon> _dictionary = new Dictionary<PawPointer, PointerIcon>();
-    [SerializeField] Transform _playerTransform;
-    [SerializeField] Camera _camera;
+    [SerializeField] private Transform _playerTransform;
+    [SerializeField] private  Camera _camera;
+    [SerializeField] private Transform _cameraTarget;
+    [SerializeField] private Player _player;
 
     public static PointerManager Instance;
     private void Awake() {
@@ -21,6 +23,8 @@ public class PointerManager : MonoBehaviour {
     public void AddToList(PawPointer enemyPointer) {
         PointerIcon newPointer = Instantiate(_pointerPrefab, transform);
         newPointer._pawPointer = enemyPointer;
+        newPointer._cameraTarget = _cameraTarget;
+        newPointer._player = _player;
         _dictionary.Add(enemyPointer, newPointer);
     }
 

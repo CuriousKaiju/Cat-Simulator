@@ -2,11 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class PointerIcon : MonoBehaviour {
 
-    [SerializeField] Image _image;
+    [SerializeField] private Button _button;
+    [SerializeField] private Image _image;
+    [SerializeField] private float _rotationTime;
     public PawPointer _pawPointer;
+    public Transform _cameraTarget;
+    public Player _player;
     bool _isShown = true;
 
     private void Awake() {
@@ -26,14 +31,23 @@ public class PointerIcon : MonoBehaviour {
         StartCoroutine(ShowProcess());
     }
 
-    public void Hide() {
+    public void Hide()
+    {
         if (!_isShown) return;
         _isShown = false;
 
         StopAllCoroutines();
         StartCoroutine(HideProcess());
     }
-
+    
+    public void RotateCameraToTheWayPointer()
+    {
+        _player.SetControllStatus(false);
+        _cameraTarget.DOLookAt(_pawPointer.transform.position, _rotationTime).OnComplete(() =>
+        {
+            _player.SetControllStatus(true);
+        });
+    }
     IEnumerator ShowProcess() {
         _image.enabled = true;
         transform.localScale = Vector3.zero;

@@ -41,7 +41,7 @@ public class PlayerInteraction : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, 100))
         {
-            //var hittedObject = hit.collider.gameObject;
+            var hittedObject = hit.collider.gameObject;
 
             Vector2 pos;
             RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)_canvas.transform,
@@ -61,7 +61,7 @@ public class PlayerInteraction : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, 100))
         {
-            //var hittedObject = hit.collider.gameObject;
+            var hittedObject = hit.collider.gameObject;
 
 
             Vector2 pos;

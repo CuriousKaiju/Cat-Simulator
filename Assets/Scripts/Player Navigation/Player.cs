@@ -4,15 +4,31 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private PlayerInteraction _playerInteraction;
+    [SerializeField] private NavigationAroundObject _navigationAroundObject;
+
+    private void Start()
+    {
+        Cursor.visible = true;
+    }
+
+    public void SetControllStatus(bool status)
+    {
+        if (status)
+        {
+            CameraRotationToNull();
+        }
+        _playerInteraction.enabled = status;
+        _navigationAroundObject._externalRotationPhase = status;
+    }
+    private void CameraRotationToNull()
+    {
+        _navigationAroundObject.SetPitchAndYaw();
+    }
+    private void Update()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }
