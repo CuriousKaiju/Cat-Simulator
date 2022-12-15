@@ -17,7 +17,7 @@ public class PlayerInteraction : MonoBehaviour
     private Vector2 _firstCrosPoint;
 
 
-    void Update()
+    public void TouchHandler()
     {
         if (Input.GetMouseButtonDown(0))
         {

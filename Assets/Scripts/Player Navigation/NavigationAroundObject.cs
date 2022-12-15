@@ -18,7 +18,6 @@ public class NavigationAroundObject : MonoBehaviour
 
     private bool _isFingerOnTheScreen;
     private bool _needRotate;
-    public bool _externalRotationPhase;
 
     private float _timePassed;
     private float _pitch = 0.0f;
@@ -29,22 +28,11 @@ public class NavigationAroundObject : MonoBehaviour
     {
         Application.targetFrameRate = 60;
     }
-    void Update()
-    {
-        TouchHandler();
-    }
 
-    private void TouchHandler()
+    public void TouchHandler()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if(!_externalRotationPhase)
-            {
-                SetPitchAndYaw();
-                DOTween.KillAll();
-                _externalRotationPhase = false;
-            }
-
             if (!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
             {
                 _isFingerOnTheScreen = true;

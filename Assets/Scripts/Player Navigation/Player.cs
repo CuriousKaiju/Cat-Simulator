@@ -1,33 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] private PlayerInteraction _playerInteraction;
     [SerializeField] private NavigationAroundObject _navigationAroundObject;
-
-    private void Start()
-    {
-        Cursor.visible = true;
-    }
+    private bool _externalNavigation;
 
     public void SetControllStatus(bool status)
     {
-        if (status)
-        {
-            CameraRotationToNull();
-        }
         _playerInteraction.enabled = status;
-        _navigationAroundObject._externalRotationPhase = status;
-    }
-    private void CameraRotationToNull()
-    {
+        _navigationAroundObject.enabled = status;
         _navigationAroundObject.SetPitchAndYaw();
     }
+
+   
+
     private void Update()
     {
-        
+        if(_externalNavigation)
+        {
+            _playerInteraction.TouchHandler();
+            _navigationAroundObject.TouchHandler();
+        }
     }
 
 
