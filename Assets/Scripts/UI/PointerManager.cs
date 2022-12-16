@@ -20,8 +20,9 @@ public class PointerManager : MonoBehaviour {
         }
     }
 
-    public void AddToList(PawPointer enemyPointer) {
-        PointerIcon newPointer = Instantiate(_pointerPrefab, transform);
+    public void AddToList(PawPointer enemyPointer)
+    {
+        PointerIcon newPointer = Instantiate(_pointerPrefab, transform).GetComponent<PointerIcon>();
         newPointer._pawPointer = enemyPointer;
         newPointer._cameraTarget = _cameraTarget;
         newPointer._player = _player;
@@ -29,6 +30,7 @@ public class PointerManager : MonoBehaviour {
     }
 
     public void RemoveFromList(PawPointer enemyPointer) {
+
         Destroy(_dictionary[enemyPointer].gameObject);
         _dictionary.Remove(enemyPointer);
     }

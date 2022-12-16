@@ -12,6 +12,7 @@ public class PointerIcon : MonoBehaviour {
     public PawPointer _pawPointer;
     public Transform _cameraTarget;
     public Player _player;
+    public int _id;
     bool _isShown = true;
 
     private void Awake() {

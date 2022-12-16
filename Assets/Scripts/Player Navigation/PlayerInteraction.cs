@@ -6,15 +6,17 @@ using UnityEngine.EventSystems;
 public class PlayerInteraction : MonoBehaviour
 {
 
-    [Header("COMPONENTS")] 
+    [Header("COMPONENTS")]
     [SerializeField] private Canvas _canvas;
     [SerializeField] private Pool _crossPool;
     [SerializeField] private Camera _camera;
+    [SerializeField] private Player _player;
 
     [Header("TAGS")]
-    [SerializeField] private string _movePoint;
+    [SerializeField] private string _movePointTag;
 
     private Vector2 _firstCrosPoint;
+    private GameObject _firstPawPoint;
 
 
     public void TouchHandler()
@@ -43,12 +45,21 @@ public class PlayerInteraction : MonoBehaviour
         {
             var hittedObject = hit.collider.gameObject;
 
-            Vector2 pos;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)_canvas.transform,
-                                                                     mousePosition,
-                                                                     _canvas.worldCamera,
-                                                                     out pos);
-            _firstCrosPoint = pos;
+            if (hittedObject.CompareTag(_movePointTag))
+            {
+                _firstPawPoint = hittedObject;
+                var tappedPlatform = _firstPawPoint.GetComponent<PawPoint>();
+                tappedPlatform.SetPressedState();
+            }
+            else
+            {
+                Vector2 pos;
+                RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)_canvas.transform,
+                                                                         mousePosition,
+                                                                         _canvas.worldCamera,
+                                                                         out pos);
+                _firstCrosPoint = pos;
+            }
         }
 
     }
@@ -63,18 +74,42 @@ public class PlayerInteraction : MonoBehaviour
         {
             var hittedObject = hit.collider.gameObject;
 
-
-            Vector2 pos;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)_canvas.transform,
-                                                                     mousePosition,
-                                                                     _canvas.worldCamera,
-                                                                     out pos);
-            if (_firstCrosPoint == pos)
+            if (hittedObject.CompareTag(_movePointTag))
             {
-                Transform newCros = _crossPool.GetFreeElementObject();
-                newCros.position = _canvas.transform.TransformPoint(pos);
-                newCros.gameObject.SetActive(true);
+                if (_firstPawPoint == hittedObject)
+                {
+                    var selectedPawPoint = hittedObject.GetComponent<PawPoint>();
+                    selectedPawPoint.ClosePoint();
+
+                    _player.MoveTo(selectedPawPoint.transform);
+                }
             }
+            else
+            {
+                Vector2 pos;
+                RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)_canvas.transform,
+                                                                         mousePosition,
+                                                                         _canvas.worldCamera,
+                                                                         out pos);
+                if (_firstCrosPoint == pos)
+                {
+                    Transform newCros = _crossPool.GetFreeElementObject();
+                    newCros.position = _canvas.transform.TransformPoint(pos);
+                    newCros.gameObject.SetActive(true);
+                }
+            }
+
+            FreshAllFirstClicks();
         }
     }
+
+    private void FreshAllFirstClicks()
+    {
+        if(_firstPawPoint != null)
+        {
+            _firstPawPoint.GetComponent<PawPoint>().SetUnpressedState();
+            _firstPawPoint = null;
+        }
+    }
+
 }
