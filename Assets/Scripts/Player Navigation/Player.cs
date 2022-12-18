@@ -101,7 +101,8 @@ public class Player : MonoBehaviour
                         {
                             _currentState = State.BaseState;
                             _navMeshAgent.enabled = false;
-                            Jump();
+                            RotationBeforeJump();
+                            //Jump();
                         }
                     }
                 }
@@ -111,12 +112,20 @@ public class Player : MonoBehaviour
 
     }
 
+    private void RotationBeforeJump()
+    {
+        _playerVisualization.SetJumpAnimation();
+        transform.DOLookAt(new Vector3(_closePointToTargetRed.position.x, 0, _closePointToTargetRed.position.z), 1.2f).OnComplete(() =>
+        {
+            Jump();
+        });
+    }
 
     private void Jump()
     {
         _playerVisualization.SetJumpAnimation();
 
-        transform.DOJump(_closePointToTargetRed.position, 0.5f, 1, 1).OnComplete(() =>
+        transform.DOJump(_closePointToTargetRed.position, 0.6f, 1, 1).OnComplete(() =>
         {
             _navMeshAgent.enabled = true;
             MovementAfterJump();
@@ -189,6 +198,7 @@ public class Player : MonoBehaviour
 
     private void MovementAfterJump()
     {
+        _playerVisualization.SetRunAnimation();
         _navMeshAgent.SetDestination(_target.position);
     }
 

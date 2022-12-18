@@ -12,6 +12,7 @@ public class PawPoint : MonoBehaviour
     [SerializeField] private PawVisualization _pawVisualization;
     [SerializeField] private PawPointer _pawPointer;
     [SerializeField] private Collider _collider;
+    [SerializeField]
 
     public NavMeshAgent _navMeshAgent;
     public void ClosePoint()
