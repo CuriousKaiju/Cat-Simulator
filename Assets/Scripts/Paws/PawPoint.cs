@@ -8,12 +8,24 @@ public class PawPoint : MonoBehaviour
 {
     [HideInInspector] public UnityEvent OnClose;
 
+    [SerializeField] private string _desiredTag;
     [SerializeField] private PawVisualization _pawVisualization;
+    [SerializeField] private PawPointer _pawPointer;
+    [SerializeField] private Collider _collider;
+
     public NavMeshAgent _navMeshAgent;
     public void ClosePoint()
     {
+        gameObject.tag = "Untagged";
         SetUnpressedState();
         _pawVisualization.ClosePawPoint();
+        OnClose.Invoke();
+    }
+    public void ClosePointwWithParticles()
+    {
+        gameObject.tag = "Untagged";
+        SetUnpressedState();
+        _pawVisualization.CloasePawPointWithParticles();
         OnClose.Invoke();
     }
     public void SetPressedState()
@@ -23,5 +35,13 @@ public class PawPoint : MonoBehaviour
     public void SetUnpressedState()
     {
         _pawVisualization.SetParticlesStatus(false);
+    }
+
+    public void SetPointIneractiveStatus()
+    {
+        GetComponent<NavMeshAgent>().enabled = true;
+        gameObject.tag = _desiredTag;
+        _pawPointer.InitArrow();
+        _pawVisualization.SetActivePawPointStatus();
     }
 }

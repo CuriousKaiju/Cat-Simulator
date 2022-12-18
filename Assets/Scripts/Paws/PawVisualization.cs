@@ -16,6 +16,7 @@ public class PawVisualization : MonoBehaviour
     [Header("INTERACTIVE")]
     [SerializeField] private GameObject _selectedParticles;
     [SerializeField] private GameObject _tapedParticles;
+    [SerializeField] private GameObject _glowParticles;
 
 
     private void Start()
@@ -49,5 +50,21 @@ public class PawVisualization : MonoBehaviour
     {
         _animator.SetTrigger("Close");
         _tapedParticles.SetActive(true);
+    }
+    public void CloasePawPointWithParticles()
+    {
+        _animator.SetTrigger("Close");
+        _glowParticles.SetActive(false);
+
+    }
+    public void SetActivePawPointStatus()
+    {
+        _rotationPaw.gameObject.SetActive(true);
+        _glowParticles.SetActive(true);
+        _animator.SetTrigger("Open");
+    }
+    public void PlayerCame()
+    {
+        _animator.SetTrigger("Finish");
     }
 }

@@ -7,28 +7,33 @@ using UnityEngine.AI;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private Rigidbody[] _ragDoll;
+    [SerializeField] private PlayerVisualization _playerVisualization;
+    [SerializeField] private PawObserver _pawObserver;
     [SerializeField] private PlayerInteraction _playerInteraction;
     [SerializeField] private NavigationAroundObject _navigationAroundObject;
     [SerializeField] private NavMeshAgent _navMeshAgent;
     [SerializeField] private Transform _closePointToTargetGreen;
     [SerializeField] private Transform _closePointToTargetRed;
     [SerializeField] private float _jumpVectorOffset;
-    private Transform _target;
+    [SerializeField] private Transform _target;
+    private Transform _previousTarget;
     private bool _externalNavigation = true;
     private enum State { BaseState = 0, MoveToFinishPoint = 1, MoveToJumpPoint = 2 }
-    private State _currentState = State.BaseState; 
+    private State _currentState = State.BaseState;
 
-    public void SetControllStatus(bool status)
+
+    private void Start()
     {
-        _externalNavigation = status;
+        _navMeshAgent.updateRotation = false;
 
-        if (_externalNavigation)
+        foreach (Rigidbody rb in _ragDoll)
         {
-            _navigationAroundObject.SetPitchAndYaw();
+            rb.isKinematic = true;
         }
+
+        _pawObserver.FindNearestsPawPoints(_target.gameObject);
     }
-
-
 
     private void Update()
     {
@@ -37,7 +42,7 @@ public class Player : MonoBehaviour
             if (!_externalNavigation)
             {
                 _externalNavigation = true;
-                DOTween.KillAll();
+                _navigationAroundObject.transform.DOKill();
                 _navigationAroundObject.SetPitchAndYaw();
             }
         }
@@ -55,6 +60,15 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void SetControllStatus(bool status)
+    {
+        _externalNavigation = status;
+
+        if (_externalNavigation)
+        {
+            _navigationAroundObject.SetPitchAndYaw();
+        }
+    }
     private void StateChecker()
     {
         switch (_currentState)
@@ -67,12 +81,14 @@ public class Player : MonoBehaviour
                     {
                         if (!_navMeshAgent.hasPath || _navMeshAgent.velocity.sqrMagnitude == 0f)
                         {
-                            _navigationAroundObject.SetPitchAndYaw();
+                            _target.GetComponent<PawVisualization>().PlayerCame();
+                            _pawObserver.FindNearestsPawPoints(_target.gameObject);
                             _currentState = State.BaseState;
+                            _playerVisualization.SetIdleAnimation();
                         }
                     }
                 }
-                    
+
                 break;
 
             case State.MoveToJumpPoint:
@@ -92,24 +108,31 @@ public class Player : MonoBehaviour
 
                 break;
         }
+
     }
+
 
     private void Jump()
     {
-        transform.DOJump(_closePointToTargetRed.position, 1, 1, 2).OnComplete(() =>
+        _playerVisualization.SetJumpAnimation();
+
+        transform.DOJump(_closePointToTargetRed.position, 0.5f, 1, 1).OnComplete(() =>
         {
             _navMeshAgent.enabled = true;
             MovementAfterJump();
             _currentState = State.MoveToFinishPoint;
-        });
-    
+        });   
     }
-
 
 
     public void MoveTo(Transform target)
     {
         _target = target;
+
+        if (_target)
+        {
+            _pawObserver.UpdateToNullPawPointsArray(_target.GetComponent<PawPoint>());
+        }
 
         Vector3 pos2 = ReturnClosestPointBackToAgent(_navMeshAgent, target.position);
         Vector3 pos1 = ReturnClosestPointBackToAgent(target.GetComponent<NavMeshAgent>(), pos2);
@@ -126,14 +149,42 @@ public class Player : MonoBehaviour
 
             _navMeshAgent.SetDestination(_closePointToTargetGreen.position);
             _currentState = State.MoveToJumpPoint;
+            transform.DOLookAt(_closePointToTargetGreen.position, 1);
+            CheckTargetOrientation(_closePointToTargetGreen);
         }
         else
         {
             _navMeshAgent.SetDestination(_closePointToTargetGreen.position);
             _currentState = State.MoveToFinishPoint;
+            transform.DOLookAt(_target.position, 1);
+            CheckTargetOrientation(_target);
         }
 
-        target.GetComponent<NavMeshAgent>().enabled = false;     
+        target.GetComponent<NavMeshAgent>().enabled = false;
+
+        
+
+        
+
+    }
+
+    private void CheckTargetOrientation(Transform target)
+    {
+        Vector3 directionToTarget = Vector3.Normalize(target.position - transform.position);
+        float dot = Vector3.Dot(transform.right, directionToTarget);
+
+        if(Mathf.Abs(dot) <= 0.1f)
+        {
+            _playerVisualization.SetRunAnimation();
+        }
+        else if (dot < 0)
+        {
+            _playerVisualization.SetLeftRun();
+        }
+        else if (dot > 0)
+        {
+            _playerVisualization.SetRightRun();
+        } 
     }
 
     private void MovementAfterJump()
