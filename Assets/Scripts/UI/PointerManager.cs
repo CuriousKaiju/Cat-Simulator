@@ -20,6 +20,11 @@ public class PointerManager : MonoBehaviour {
         }
     }
 
+
+    public void ClearDictionary()
+    {
+        
+    }
     public void AddToList(PawPointer enemyPointer)
     {
         PointerIcon newPointer = Instantiate(_pointerPrefab, transform).GetComponent<PointerIcon>();

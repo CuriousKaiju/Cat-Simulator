@@ -8,8 +8,11 @@ public class PawPointer : MonoBehaviour
 
     private void Start()
     {
-        PointerManager.Instance.AddToList(this);
         _pawPoint.OnClose.AddListener(Destroy);
+    }
+    public void InitArrow()
+    {
+        PointerManager.Instance.AddToList(this);
     }
     private void Destroy()
     {
