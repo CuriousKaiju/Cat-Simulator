@@ -140,13 +140,16 @@ public class Player : MonoBehaviour
 
     public void MoveTo(Transform target)
     {
+        
         _target = target;
+        _pawObserver.UpdateToNullPawPointsArray(_target.GetComponent<PawPoint>());
+        _navMeshAgent.SetDestination(_target.position);
+        target.GetComponent<NavMeshAgent>().enabled = false;
+        CheckTargetOrientation(_target);
+        _currentState = State.MoveToFinishPoint;
 
-        if (_target)
-        {
-            _pawObserver.UpdateToNullPawPointsArray(_target.GetComponent<PawPoint>());
-        }
-
+        /*
+        
         Vector3 pos2 = ReturnClosestPointBackToAgent(_navMeshAgent, target.position);
         Vector3 pos1 = ReturnClosestPointBackToAgent(target.GetComponent<NavMeshAgent>(), pos2);
 
@@ -155,23 +158,10 @@ public class Player : MonoBehaviour
 
         if (new Vector3(pos1.x, 0, pos1.z) != new Vector3(pos2.x, 0, pos2.z))
         {
-
-            Debug.Log("Jump");
             _navMeshAgent.enabled = false;
             RotationBeforeJump();
             _closePointToTargetRed.position = new Vector3(_target.position.x, _closePointToTargetRed.position.y, _target.position.z);
 
-
-            /*
-            _closePointToTargetRed.position = pos1;
-            Vector3 shiftVector = new Vector3(pos1.x, 0, pos1.z) - new Vector3(pos2.x, 0, pos2.z);
-            _closePointToTargetGreen.position -= shiftVector.normalized * _jumpVectorOffset;
-            _closePointToTargetRed.position += shiftVector.normalized * _jumpVectorOffset;
-
-            _navMeshAgent.SetDestination(_closePointToTargetGreen.position);
-            _currentState = State.MoveToJumpPoint;
-            CheckTargetOrientation(_closePointToTargetGreen);
-            */
         }
         else
         {
@@ -181,7 +171,7 @@ public class Player : MonoBehaviour
         }
 
         target.GetComponent<NavMeshAgent>().enabled = false;
-
+        */
     }
 
     private void CheckTargetOrientation(Transform target)
