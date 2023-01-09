@@ -18,7 +18,6 @@ public class PawVisualization : MonoBehaviour
     [SerializeField] private GameObject _tapedParticles;
     [SerializeField] private GameObject _glowParticles;
 
-
     private void Start()
     {
         _startRotationSpeed = _rotationSpeed;

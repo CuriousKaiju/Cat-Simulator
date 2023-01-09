@@ -7,24 +7,22 @@ public class PlayerVisualization : MonoBehaviour
     [SerializeField] private Animator _playerAnimator;
     void Start()
     {
-        
+
     }
     void Update()
     {
-        
+
     }
-    public void SetRunAnimation()
+    public void SetRunAnimation(bool runStatus)
     {
-        _playerAnimator.SetTrigger("Run");
+        _playerAnimator.SetBool("Run", runStatus);
     }
-    public void SetIdleAnimation()
+    public void SetJumpAnimation(bool jumpStatus)
     {
-        _playerAnimator.SetTrigger("Idle");
+        _playerAnimator.SetBool("Jump", jumpStatus);
     }
-    public void SetJumpAnimation()
-    {
-        _playerAnimator.SetTrigger("Jump");
-    }
+
+
     public void SetLeftRun()
     {
         _playerAnimator.SetTrigger("RunLeft");
@@ -32,5 +30,10 @@ public class PlayerVisualization : MonoBehaviour
     public void SetRightRun()
     {
         _playerAnimator.SetTrigger("RunRight");
+    }
+
+    public void SetForwardRun()
+    {
+        _playerAnimator.SetTrigger("RunForward");
     }
 }

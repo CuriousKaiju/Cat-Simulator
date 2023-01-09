@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        _navMeshAgent.updateRotation = false;
+        //_navMeshAgent.updateRotation = false;
 
         foreach (Rigidbody rb in _ragDoll)
         {
@@ -73,6 +73,7 @@ public class Player : MonoBehaviour
     {
         switch (_currentState)
         {
+            
             case State.MoveToFinishPoint:
 
                 if (!_navMeshAgent.pathPending)
@@ -84,11 +85,11 @@ public class Player : MonoBehaviour
                             _target.GetComponent<PawVisualization>().PlayerCame();
                             _pawObserver.FindNearestsPawPoints(_target.gameObject);
                             _currentState = State.BaseState;
-                            _playerVisualization.SetIdleAnimation();
+                            _playerVisualization.SetRunAnimation(false);
+                            _playerVisualization.SetJumpAnimation(false);
                         }
                     }
                 }
-
                 break;
 
             case State.MoveToJumpPoint:
@@ -102,7 +103,6 @@ public class Player : MonoBehaviour
                             _currentState = State.BaseState;
                             _navMeshAgent.enabled = false;
                             RotationBeforeJump();
-                            //Jump();
                         }
                     }
                 }
@@ -114,23 +114,27 @@ public class Player : MonoBehaviour
 
     private void RotationBeforeJump()
     {
-        _playerVisualization.SetJumpAnimation();
-        transform.DOLookAt(new Vector3(_closePointToTargetRed.position.x, 0, _closePointToTargetRed.position.z), 1.2f).OnComplete(() =>
+        CheckTargetOrientation(_closePointToTargetRed);
+
+        transform.DOLookAt(new Vector3(_closePointToTargetRed.position.x, transform.position.y, _closePointToTargetRed.position.z), 0.8f).OnComplete(() =>
         {
-            Jump();
+            _playerVisualization.SetJumpAnimation(true);
+            _playerVisualization.SetRunAnimation(false);
         });
     }
 
-    private void Jump()
+    public void Jump()
     {
-        _playerVisualization.SetJumpAnimation();
-
-        transform.DOJump(_closePointToTargetRed.position, 0.6f, 1, 1).OnComplete(() =>
-        {
-            _navMeshAgent.enabled = true;
-            MovementAfterJump();
-            _currentState = State.MoveToFinishPoint;
-        });   
+        transform.DOJump(_closePointToTargetRed.position, 0.6f, 1, 1);
+    }
+    public void Finish()
+    {
+        _target.GetComponent<PawVisualization>().PlayerCame();
+        _pawObserver.FindNearestsPawPoints(_target.gameObject);
+        _currentState = State.BaseState;
+        _playerVisualization.SetRunAnimation(false);
+        _playerVisualization.SetJumpAnimation(false);
+        _navMeshAgent.enabled = true;
     }
 
 
@@ -151,6 +155,14 @@ public class Player : MonoBehaviour
 
         if (new Vector3(pos1.x, 0, pos1.z) != new Vector3(pos2.x, 0, pos2.z))
         {
+
+            Debug.Log("Jump");
+            _navMeshAgent.enabled = false;
+            RotationBeforeJump();
+            _closePointToTargetRed.position = new Vector3(_target.position.x, _closePointToTargetRed.position.y, _target.position.z);
+
+
+            /*
             _closePointToTargetRed.position = pos1;
             Vector3 shiftVector = new Vector3(pos1.x, 0, pos1.z) - new Vector3(pos2.x, 0, pos2.z);
             _closePointToTargetGreen.position -= shiftVector.normalized * _jumpVectorOffset;
@@ -158,22 +170,17 @@ public class Player : MonoBehaviour
 
             _navMeshAgent.SetDestination(_closePointToTargetGreen.position);
             _currentState = State.MoveToJumpPoint;
-            transform.DOLookAt(_closePointToTargetGreen.position, 1);
             CheckTargetOrientation(_closePointToTargetGreen);
+            */
         }
         else
         {
             _navMeshAgent.SetDestination(_closePointToTargetGreen.position);
             _currentState = State.MoveToFinishPoint;
-            transform.DOLookAt(_target.position, 1);
             CheckTargetOrientation(_target);
         }
 
         target.GetComponent<NavMeshAgent>().enabled = false;
-
-        
-
-        
 
     }
 
@@ -182,25 +189,24 @@ public class Player : MonoBehaviour
         Vector3 directionToTarget = Vector3.Normalize(target.position - transform.position);
         float dot = Vector3.Dot(transform.right, directionToTarget);
 
-        if(Mathf.Abs(dot) <= 0.1f)
+        if (Mathf.Abs(dot) <= 0.4f)
         {
-            _playerVisualization.SetRunAnimation();
+            _playerVisualization.SetRunAnimation(true);
+            _playerVisualization.SetForwardRun();
         }
         else if (dot < 0)
         {
+            _playerVisualization.SetRunAnimation(true);
             _playerVisualization.SetLeftRun();
         }
         else if (dot > 0)
         {
+            _playerVisualization.SetRunAnimation(true);
             _playerVisualization.SetRightRun();
-        } 
+        }
     }
+    
 
-    private void MovementAfterJump()
-    {
-        _playerVisualization.SetRunAnimation();
-        _navMeshAgent.SetDestination(_target.position);
-    }
 
     public Vector3 ReturnClosestPointBackToAgent(NavMeshAgent navMeshAgent, Vector3 agentPosition)
     {
