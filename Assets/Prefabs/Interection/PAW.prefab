@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5724762361998023326}
   - component: {fileID: 5724762361998023324}
   - component: {fileID: 1238520255}
+  - component: {fileID: 1881458718}
   m_Layer: 9
   m_Name: PAW
   m_TagString: Untagged
@@ -111,7 +112,9 @@ MonoBehaviour:
       m_Calls: []
   _desiredTag: Paw
   _pawVisualization: {fileID: 5724762361998023326}
+  _pawPointer: {fileID: 5724762362184801610}
   _collider: {fileID: 5724762361998023325}
+  _haptic: {fileID: 1881458718}
   _navMeshAgent: {fileID: 1238520255}
 --- !u!195 &1238520255
 NavMeshAgent:
@@ -135,6 +138,24 @@ NavMeshAgent:
   m_BaseOffset: 0.33
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1881458718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5724762361998023320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d20df93fb7de8457baa15a213a53ab19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clip: {fileID: -8404250095460277587, guid: 6ba7f34892e4048be87810ea8621b3df, type: 3}
+  priority: 128
+  _fallbackPreset: -1
+  _loop: 0
+  _level: 1
+  _frequencyShift: 0
 --- !u!1 &5724762362184801620
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,7 +172,7 @@ GameObject:
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5724762362184801621
 Transform:
   m_ObjectHideFlags: 0
@@ -494,7 +515,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 457352, guid: 087da436576d35542825d392925d79c4, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.13278179
+      value: 0.1327818
       objectReference: {fileID: 0}
     - target: {fileID: 457352, guid: 087da436576d35542825d392925d79c4, type: 3}
       propertyPath: m_LocalScale.y
@@ -502,7 +523,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 457352, guid: 087da436576d35542825d392925d79c4, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.13278179
+      value: 0.1327818
       objectReference: {fileID: 0}
     - target: {fileID: 457352, guid: 087da436576d35542825d392925d79c4, type: 3}
       propertyPath: m_LocalPosition.x

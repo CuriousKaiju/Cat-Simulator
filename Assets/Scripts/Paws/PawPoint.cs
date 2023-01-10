@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.AI;
+using Lofelt.NiceVibrations;
 
 public class PawPoint : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class PawPoint : MonoBehaviour
     [SerializeField] private PawVisualization _pawVisualization;
     [SerializeField] private PawPointer _pawPointer;
     [SerializeField] private Collider _collider;
-    [SerializeField]
+    [SerializeField] private HapticSource _haptic;
 
     public NavMeshAgent _navMeshAgent;
     public void ClosePoint()
@@ -21,6 +22,7 @@ public class PawPoint : MonoBehaviour
         SetUnpressedState();
         _pawVisualization.ClosePawPoint();
         OnClose.Invoke();
+        Debug.Log("haptic");
     }
     public void ClosePointwWithParticles()
     {
@@ -28,6 +30,7 @@ public class PawPoint : MonoBehaviour
         SetUnpressedState();
         _pawVisualization.CloasePawPointWithParticles();
         OnClose.Invoke();
+        _haptic.Play();  
     }
     public void SetPressedState()
     {
