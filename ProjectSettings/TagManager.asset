@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Paw
+  - Interaction
   layers:
   - Default
   - TransparentFX
@@ -16,7 +17,7 @@ TagManager:
   - Way Pointers
   - Nav Mesh
   - Paw Point
-  - 
+  - Interaction Point
   - 
   - 
   - 

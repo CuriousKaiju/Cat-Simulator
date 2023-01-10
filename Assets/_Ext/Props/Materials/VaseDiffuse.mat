@@ -10,9 +10,10 @@ Material:
   m_Name: VaseDiffuse
   m_Shader: {fileID: 4800000, guid: 7ffc1bc2bbb1ef64f84b552b2d2f0619, type: 3}
   m_ValidKeywords:
+  - TCP2_MOBILE
+  - TCP2_RAMPTEXT
   - TCP2_REFLECTIONS_FRESNEL
   - TCP2_RIM_LIGHTING_LIGHTMASK
-  - TCP2_SHADOW_LIGHT_COLOR
   - _RECEIVE_SHADOWS_OFF
   m_InvalidKeywords:
   - TCP2_UV_NORMALS_FULL
@@ -140,13 +141,13 @@ Material:
     - _OutlineWidth: 1
     - _Parallax: 0.005
     - _QueueOffset: 0
-    - _RampBands: 4
-    - _RampBandsSmoothing: 0.1
+    - _RampBands: 10
+    - _RampBandsSmoothing: 0.22
     - _RampOffset: 0
-    - _RampScale: 1
-    - _RampSmoothing: 1
-    - _RampThreshold: 0.327
-    - _RampType: 0
+    - _RampScale: -3.08
+    - _RampSmoothing: 0.779
+    - _RampThreshold: 1
+    - _RampType: 4
     - _ReceiveShadows: 1
     - _ReceiveShadowsOff: 0
     - _ReflectionMapType: 0
@@ -154,7 +155,7 @@ Material:
     - _RenderingMode: 0
     - _RimMax: 1
     - _RimMin: 0.5
-    - _ShadowColorLightAtten: 1
+    - _ShadowColorLightAtten: 0
     - _SingleIndirectColor: 0
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
@@ -171,7 +172,7 @@ Material:
     - _UseFresnelReflections: 1
     - _UseMatCap: 0
     - _UseMatCapMask: 0
-    - _UseMobileMode: 0
+    - _UseMobileMode: 1
     - _UseNormalMap: 0
     - _UseOcclusion: 0
     - _UseOutline: 0

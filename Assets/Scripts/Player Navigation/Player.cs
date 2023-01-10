@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Rigidbody[] _ragDoll;
     [SerializeField] private PlayerVisualization _playerVisualization;
     [SerializeField] private PawObserver _pawObserver;
+    [SerializeField] private InteractionObserver _interactionObserver;
     [SerializeField] private PlayerInteraction _playerInteraction;
     [SerializeField] private NavigationAroundObject _navigationAroundObject;
     [SerializeField] private NavMeshAgent _navMeshAgent;
@@ -20,14 +21,12 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform _target;
     private Transform _previousTarget;
     private bool _externalNavigation = true;
-    private enum State { BaseState = 0, MoveToFinishPoint = 1, MoveToJumpPoint = 2 }
+    private enum State { BaseState = 0, MoveToFinishPoint = 1, MoveToJumpPoint = 2 }  
     private State _currentState = State.BaseState;
 
 
     private void Start()
     {
-        //_navMeshAgent.updateRotation = false;
-
         foreach (Rigidbody rb in _ragDoll)
         {
             rb.isKinematic = true;
@@ -86,6 +85,7 @@ public class Player : MonoBehaviour
                         {
                             _target.GetComponent<PawVisualization>().PlayerCame();
                             _pawObserver.FindNearestsPawPoints(_target.gameObject);
+                            _interactionObserver.FindNearestsInteractioveObjects();
                             _currentState = State.BaseState;
                             _playerVisualization.SetRunAnimation(false);
                             _playerVisualization.SetJumpAnimation(false);
@@ -104,7 +104,6 @@ public class Player : MonoBehaviour
                         {
                             _currentState = State.BaseState;
                             _navMeshAgent.enabled = false;
-                            //RotationBeforeJump();
                         }
                     }
                 }
@@ -127,6 +126,26 @@ public class Player : MonoBehaviour
         });
     }
 
+    public void RotationForInteraction(Transform interactionObjectTransform, InteractiveObject interactionObject, Vector2 canvasFeedBackPosition)
+    {
+        _cameraTarget.SetParent(null);
+        CheckTargetOrientation(interactionObjectTransform);
+        Quaternion targetRotation = Quaternion.LookRotation(new Vector3(interactionObjectTransform.position.x, transform.position.y, interactionObjectTransform.position.z) - transform.position);
+        transform.DORotateQuaternion(targetRotation, 0.5f).OnComplete(() =>
+        {
+            _playerVisualization.SetAttackAnimation();
+            StartCoroutine(AttackDeley(interactionObject, canvasFeedBackPosition));
+        });
+    }
+    private IEnumerator AttackDeley(InteractiveObject interactionObject, Vector2 canvasFeedBackPosition)
+    {
+        yield return new WaitForSeconds(0.7f);
+        interactionObject.TakeInteractiveObject(canvasFeedBackPosition);
+        _cameraTarget.SetParent(transform);
+        _playerVisualization.SetRunAnimation(false);
+        _playerVisualization.SetJumpAnimation(false);
+    }
+
     public void Jump()
     {
         transform.DOJump(_closePointToTargetRed.position, 0.6f, 1, 1);
@@ -135,6 +154,7 @@ public class Player : MonoBehaviour
     {
         _target.GetComponent<PawVisualization>().PlayerCame();
         _pawObserver.FindNearestsPawPoints(_target.gameObject);
+        _interactionObserver.FindNearestsInteractioveObjects();
         _currentState = State.BaseState;
         _playerVisualization.SetRunAnimation(false);
         _playerVisualization.SetJumpAnimation(false);
@@ -147,6 +167,7 @@ public class Player : MonoBehaviour
 
         _target = target;
         _pawObserver.UpdateToNullPawPointsArray(_target.GetComponent<PawPoint>());
+        _interactionObserver.UpdateToNullInteractioveObjectsArray();
         CheckTargetOrientation(_target);
 
         Vector3 pos2 = ReturnClosestPointBackToAgent(_navMeshAgent, target.position);
@@ -157,7 +178,6 @@ public class Player : MonoBehaviour
 
         if (new Vector3(pos1.x, 0, pos1.z) != new Vector3(pos2.x, 0, pos2.z))
         {
-            Debug.Log("jump");
             _navMeshAgent.enabled = false;
             _closePointToTargetRed.position = new Vector3(_target.position.x, _closePointToTargetRed.position.y, _target.position.z);
             RotationBeforeJump();
@@ -165,7 +185,6 @@ public class Player : MonoBehaviour
         }
         else
         {
-            Debug.Log("run");
             _navMeshAgent.SetDestination(_closePointToTargetGreen.position);
             _currentState = State.MoveToFinishPoint;
             CheckTargetOrientation(_target);
