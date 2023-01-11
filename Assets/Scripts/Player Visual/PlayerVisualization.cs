@@ -36,4 +36,9 @@ public class PlayerVisualization : MonoBehaviour
     {
         _playerAnimator.SetTrigger("RunForward");
     }
+
+    public void SetAttackAnimation()
+    {
+        _playerAnimator.SetTrigger("Attack");
+    }
 }

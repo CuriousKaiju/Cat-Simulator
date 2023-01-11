@@ -22,7 +22,6 @@ public class PawPoint : MonoBehaviour
         SetUnpressedState();
         _pawVisualization.ClosePawPoint();
         OnClose.Invoke();
-        Debug.Log("haptic");
     }
     public void ClosePointwWithParticles()
     {

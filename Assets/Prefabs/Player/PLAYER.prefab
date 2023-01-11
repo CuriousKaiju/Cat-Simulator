@@ -1597,6 +1597,7 @@ GameObject:
   - component: {fileID: 1215930649888224185}
   - component: {fileID: 856310166}
   - component: {fileID: 6401420293670506614}
+  - component: {fileID: 5038335767643049095}
   - component: {fileID: 856310160}
   m_Layer: 0
   m_Name: CAT
@@ -1670,6 +1671,7 @@ MonoBehaviour:
   _navMeshAgent: {fileID: 856310160}
   _closePointToTargetGreen: {fileID: 0}
   _closePointToTargetRed: {fileID: 0}
+  _cameraTarget: {fileID: 0}
   _jumpVectorOffset: 0.2
   _target: {fileID: 0}
 --- !u!114 &856310166
@@ -1702,6 +1704,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerAnimator: {fileID: 1215930649196650301}
+--- !u!114 &5038335767643049095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215930649888224182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c7e289dcf5d1ca45b1824509ed46064, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!195 &856310160
 NavMeshAgent:
   m_ObjectHideFlags: 0

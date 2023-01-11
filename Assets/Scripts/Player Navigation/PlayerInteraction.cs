@@ -14,9 +14,11 @@ public class PlayerInteraction : MonoBehaviour
 
     [Header("TAGS")]
     [SerializeField] private string _movePointTag;
+    [SerializeField] private string _interactionObjectTag;
 
     private Vector2 _firstCrosPoint;
     private GameObject _firstPawPoint;
+    private GameObject _firstInteractiveObject;
 
 
     public void TouchHandler()
@@ -51,6 +53,10 @@ public class PlayerInteraction : MonoBehaviour
                 var tappedPlatform = _firstPawPoint.GetComponent<PawPoint>();
                 tappedPlatform.SetPressedState();
             }
+            else if(hittedObject.CompareTag(_interactionObjectTag))
+            {
+                _firstInteractiveObject = hittedObject;
+            }
             else
             {
                 Vector2 pos;
@@ -84,6 +90,19 @@ public class PlayerInteraction : MonoBehaviour
                     _player.MoveTo(selectedPawPoint.transform);
                 }
             }
+            else if (hittedObject.CompareTag(_interactionObjectTag))
+            {
+                if(_firstInteractiveObject == hittedObject)
+                {
+                    Vector2 pos;
+                    RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)_canvas.transform,
+                                                                             mousePosition,
+                                                                             _canvas.worldCamera,
+                                                                             out pos);
+
+                    _player.RotationForInteraction(_firstInteractiveObject.transform, _firstInteractiveObject.GetComponent<InteractiveObject>(), pos);
+                }
+            }
             else
             {
                 Vector2 pos;
@@ -105,10 +124,15 @@ public class PlayerInteraction : MonoBehaviour
 
     private void FreshAllFirstClicks()
     {
-        if(_firstPawPoint != null)
+        if (_firstPawPoint != null)
         {
             _firstPawPoint.GetComponent<PawPoint>().SetUnpressedState();
             _firstPawPoint = null;
+        }
+
+        if(_firstInteractiveObject != null)
+        {
+            _firstInteractiveObject = null;
         }
     }
 
