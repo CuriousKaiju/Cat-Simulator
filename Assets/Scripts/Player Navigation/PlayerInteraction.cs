@@ -100,7 +100,19 @@ public class PlayerInteraction : MonoBehaviour
                                                                              _canvas.worldCamera,
                                                                              out pos);
 
-                    _player.RotationForInteraction(_firstInteractiveObject.transform, _firstInteractiveObject.GetComponent<InteractiveObject>(), pos);
+                    if (_firstInteractiveObject.TryGetComponent(out Shoes shoes))
+                    {
+                        _player.RotationForInteractionPoop(_firstInteractiveObject.transform, _firstInteractiveObject.GetComponent<InteractiveObject>(), pos);
+                    }
+                    else if(_firstInteractiveObject.TryGetComponent(out Claws claws))
+                    {
+                        _player.RotationForInteractionClaws(_firstInteractiveObject.transform, _firstInteractiveObject.GetComponent<InteractiveObject>(), pos);
+                    }
+                    else
+                    {
+                        _player.RotationForInteraction(_firstInteractiveObject.transform, _firstInteractiveObject.GetComponent<InteractiveObject>(), pos);
+                    }
+
                 }
             }
             else

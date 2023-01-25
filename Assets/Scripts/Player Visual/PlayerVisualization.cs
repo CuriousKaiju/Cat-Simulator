@@ -41,4 +41,14 @@ public class PlayerVisualization : MonoBehaviour
     {
         _playerAnimator.SetTrigger("Attack");
     }
+
+    public void SetPoopAnimation()
+    {
+        _playerAnimator.SetTrigger("Poop");
+    }
+
+    public void SetClawsAnimation()
+    {
+        _playerAnimator.SetTrigger("Sharpens");
+    }
 }

@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform _target;
     private Transform _previousTarget;
     private bool _externalNavigation = true;
+    private bool _interactionNavigation = false;
     private enum State { BaseState = 0, MoveToFinishPoint = 1, MoveToJumpPoint = 2 }  
     private State _currentState = State.BaseState;
 
@@ -30,7 +31,7 @@ public class Player : MonoBehaviour
         foreach (Rigidbody rb in _ragDoll)
         {
             rb.isKinematic = true;
-            rb.gameObject.GetComponent<Collider>().enabled = false;
+            //rb.gameObject.GetComponent<Collider>().enabled = false;
         }
 
         _pawObserver.FindNearestsPawPoints(_target.gameObject);
@@ -128,23 +129,69 @@ public class Player : MonoBehaviour
 
     public void RotationForInteraction(Transform interactionObjectTransform, InteractiveObject interactionObject, Vector2 canvasFeedBackPosition)
     {
-        _cameraTarget.SetParent(null);
-        CheckTargetOrientation(interactionObjectTransform);
-        Quaternion targetRotation = Quaternion.LookRotation(new Vector3(interactionObjectTransform.position.x, transform.position.y, interactionObjectTransform.position.z) - transform.position);
-        transform.DORotateQuaternion(targetRotation, 0.5f).OnComplete(() =>
+        if (_interactionNavigation == false)
         {
-            _playerVisualization.SetAttackAnimation();
-            StartCoroutine(AttackDeley(interactionObject, canvasFeedBackPosition));
-        });
+            //_interactionObserver.UpdateToNullInteractioveObjectsArray();
+            _pawObserver.UpdateToNullPawPointsArray();
+
+            _interactionNavigation = true;
+            _cameraTarget.SetParent(null);
+            CheckTargetOrientation(interactionObjectTransform);
+            Quaternion targetRotation = Quaternion.LookRotation(new Vector3(interactionObjectTransform.position.x, transform.position.y, interactionObjectTransform.position.z) - transform.position);
+            transform.DORotateQuaternion(targetRotation, 0.5f).OnComplete(() =>
+            {
+                _playerVisualization.SetAttackAnimation();
+                StartCoroutine(AttackDeley(interactionObject, canvasFeedBackPosition, 0.7f)); //pick up of object
+            });
+        }
     }
-    private IEnumerator AttackDeley(InteractiveObject interactionObject, Vector2 canvasFeedBackPosition)
+    public void RotationForInteractionPoop(Transform interactionObjectTransform, InteractiveObject interactionObject, Vector2 canvasFeedBackPosition)
     {
-        yield return new WaitForSeconds(0.7f);
+        if (_interactionNavigation == false)
+        {
+            _pawObserver.UpdateToNullPawPointsArray();
+
+            _interactionNavigation = true;
+            _cameraTarget.SetParent(null);
+            CheckTargetOrientation(interactionObjectTransform);
+            Quaternion targetRotation = Quaternion.LookRotation(transform.position - new Vector3(interactionObjectTransform.position.x, transform.position.y, interactionObjectTransform.position.z));
+            transform.DORotateQuaternion(targetRotation, 0.5f).OnComplete(() =>
+            {
+                _playerVisualization.SetPoopAnimation();
+                StartCoroutine(AttackDeley(interactionObject, canvasFeedBackPosition, 1.3f)); //pick up of object
+            });
+        }
+    }
+
+    public void RotationForInteractionClaws(Transform interactionObjectTransform, InteractiveObject interactionObject, Vector2 canvasFeedBackPosition)
+    {
+        if (_interactionNavigation == false)
+        {
+            _pawObserver.UpdateToNullPawPointsArray();
+
+            _interactionNavigation = true;
+            _cameraTarget.SetParent(null);
+            CheckTargetOrientation(interactionObjectTransform);
+            Quaternion targetRotation = Quaternion.LookRotation(new Vector3(interactionObjectTransform.position.x, transform.position.y, interactionObjectTransform.position.z) - transform.position);
+            transform.DORotateQuaternion(targetRotation, 0.5f).OnComplete(() =>
+            {
+                _playerVisualization.SetClawsAnimation();
+                StartCoroutine(AttackDeley(interactionObject, canvasFeedBackPosition, 1.3f)); //pick up of object
+            });
+        }
+    }
+    private IEnumerator AttackDeley(InteractiveObject interactionObject, Vector2 canvasFeedBackPosition, float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        _pawObserver.FindNearestsPawPoints(_target.gameObject);
+        //_interactionObserver.FindNearestsInteractioveObjects();
         interactionObject.TakeInteractiveObject(canvasFeedBackPosition);
         _cameraTarget.SetParent(transform);
         _playerVisualization.SetRunAnimation(false);
         _playerVisualization.SetJumpAnimation(false);
+        _interactionNavigation = false;
     }
+
 
     public void Jump()
     {
@@ -164,7 +211,6 @@ public class Player : MonoBehaviour
 
     public void MoveTo(Transform target)
     {
-
         _target = target;
         _pawObserver.UpdateToNullPawPointsArray(_target.GetComponent<PawPoint>());
         _interactionObserver.UpdateToNullInteractioveObjectsArray();
@@ -214,9 +260,6 @@ public class Player : MonoBehaviour
             _playerVisualization.SetRightRun();
         }
     }
-    
-
-
     public Vector3 ReturnClosestPointBackToAgent(NavMeshAgent navMeshAgent, Vector3 agentPosition)
     {
         NavMeshPath path = new NavMeshPath();

@@ -54,4 +54,12 @@ public class PawObserver : MonoBehaviour
             }
         }
     }
+
+    public void UpdateToNullPawPointsArray()
+    {
+        foreach (PawPoint pawPoint in _activePawPoints)
+        {
+            pawPoint.ClosePointwWithParticles();
+        }
+    }
 }
