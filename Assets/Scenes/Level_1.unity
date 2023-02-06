@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 315136620}
-  m_IndirectSpecularColor: {r: 0.29562703, g: 0.47400808, b: 0.7337527, a: 1}
+  m_IndirectSpecularColor: {r: 0.2956888, g: 0.47402298, b: 0.7353049, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -37683,7 +37683,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 74d149a51b4adca4f926a4be587be8b5, type: 3}
       propertyPath: m_RootOrder
-      value: 39
+      value: 38
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 74d149a51b4adca4f926a4be587be8b5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -40204,12 +40204,12 @@ LightingSettings:
   serializedVersion: 4
   m_GIWorkflowMode: 0
   m_EnableBakedLightmaps: 1
-  m_EnableRealtimeLightmaps: 1
+  m_EnableRealtimeLightmaps: 0
   m_RealtimeEnvironmentLighting: 1
   m_BounceScale: 1
   m_AlbedoBoost: 1
   m_IndirectOutputScale: 1
-  m_UsingShadowmask: 1
+  m_UsingShadowmask: 0
   m_BakeBackend: 1
   m_LightmapMaxSize: 4096
   m_BakeResolution: 40
@@ -40220,7 +40220,7 @@ LightingSettings:
   m_CompAOExponent: 1
   m_CompAOExponentDirect: 0
   m_ExtractAO: 0
-  m_MixedBakeMode: 2
+  m_MixedBakeMode: 1
   m_LightmapsBakeMode: 1
   m_FilterMode: 1
   m_LightmapParameters: {fileID: 15204, guid: 0000000000000000f000000000000000, type: 0}
@@ -64340,6 +64340,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1215930648650169824, guid: 78f3ca50f2e45144084de85d7e4f215c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1215930648778770810, guid: 78f3ca50f2e45144084de85d7e4f215c, type: 3}
       propertyPath: m_RenderMode
       value: 0
@@ -64360,6 +64364,10 @@ PrefabInstance:
       propertyPath: _closePointToTargetGreen
       value: 
       objectReference: {fileID: 1616759006}
+    - target: {fileID: 6633843000602273601, guid: 78f3ca50f2e45144084de85d7e4f215c, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8632528479530882540, guid: 78f3ca50f2e45144084de85d7e4f215c, type: 3}
       propertyPath: m_Name
       value: PLAYER
@@ -77008,7 +77016,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 676371921354862182, guid: 172e997a9d7966d4a8573f727738b543, type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 676371921354862182, guid: 172e997a9d7966d4a8573f727738b543, type: 3}
       propertyPath: m_LocalPosition.x

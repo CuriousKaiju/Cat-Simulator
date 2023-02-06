@@ -12,7 +12,9 @@
         "TRANSPARENCY/BLENDING",
         "SHADER STATES",
         "OPTIONS",
-        "THIRD PARTY PLUGINS"
+        "THIRD PARTY PLUGINS",
+        "SURFACE",
+        "SPECIAL EFFECTS"
     ],
     "UseCustomFont": true,
     "CustomFont": {
