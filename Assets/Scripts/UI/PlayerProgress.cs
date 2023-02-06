@@ -6,6 +6,8 @@ using TMPro;
 
 public class PlayerProgress : MonoBehaviour
 {
+    [SerializeField] private GameObject _winPopUp;
+
     [SerializeField] private Image _progressCircle;
     [SerializeField] private TextMeshProUGUI _progressText;
 
@@ -29,5 +31,10 @@ public class PlayerProgress : MonoBehaviour
         _progressCircle.fillAmount = percentage;
 
         _progressText.text = _playersProgress + "/" + _totalItemsCount;
+
+        if(_playersProgress == _totalItemsCount)
+        {
+            _winPopUp.SetActive(true);
+        }
     }
 }

@@ -2,9 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LevelController : MonoBehaviour
 {
+    [Header("NEXT LEVEL")]
+    [SerializeField] private string _nextLevel;
+
     [Header("INTERACTIONS POINTS")]
     [SerializeField] private Transform _cameraTranform;
     [SerializeField] private List<Transform> _interactionPoints = new List<Transform>();
@@ -29,7 +33,6 @@ public class LevelController : MonoBehaviour
     {
         GameEvents.OnPickNewItem -= ChangeQuestsStatus;
     }
-
 
     public void GetParamsAboutTheThings()
     {
@@ -81,6 +84,10 @@ public class LevelController : MonoBehaviour
         newCanasInteractiveFeedback.SetParamsOfTheCanvasFeedback(sprite, currentValue, desiredValue);
     }
 
+    public void StartNextLevel()
+    {
+        SceneManager.LoadScene(_nextLevel);
+    }
 
 }
 
