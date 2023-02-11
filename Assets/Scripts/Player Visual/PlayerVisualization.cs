@@ -51,4 +51,9 @@ public class PlayerVisualization : MonoBehaviour
     {
         _playerAnimator.SetTrigger("Sharpens");
     }
+
+    public void OffAnimation()
+    {
+        _playerAnimator.enabled = false;
+    }
 }

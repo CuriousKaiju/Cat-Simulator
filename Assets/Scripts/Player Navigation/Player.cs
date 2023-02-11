@@ -8,6 +8,7 @@ using UnityEngine.AI;
 public class Player : MonoBehaviour
 {
     [SerializeField] private Rigidbody[] _ragDoll;
+    [SerializeField] private Rigidbody _catBody;
     [SerializeField] private PlayerVisualization _playerVisualization;
     [SerializeField] private PawObserver _pawObserver;
     [SerializeField] private InteractionObserver _interactionObserver;
@@ -22,7 +23,7 @@ public class Player : MonoBehaviour
     private Transform _previousTarget;
     private bool _externalNavigation = true;
     private bool _interactionNavigation = false;
-    private enum State { BaseState = 0, MoveToFinishPoint = 1, MoveToJumpPoint = 2 }  
+    private enum State { BaseState = 0, MoveToFinishPoint = 1, MoveToJumpPoint = 2 }
     private State _currentState = State.BaseState;
 
 
@@ -56,7 +57,7 @@ public class Player : MonoBehaviour
         }
 
 
-        if(_currentState != State.BaseState)
+        if (_currentState != State.BaseState)
         {
             StateChecker();
         }
@@ -75,7 +76,7 @@ public class Player : MonoBehaviour
     {
         switch (_currentState)
         {
-            
+
             case State.MoveToFinishPoint:
 
                 if (!_navMeshAgent.pathPending)
@@ -235,7 +236,7 @@ public class Player : MonoBehaviour
             _currentState = State.MoveToFinishPoint;
             CheckTargetOrientation(_target);
         }
-        
+
         target.GetComponent<NavMeshAgent>().enabled = false;
     }
 
@@ -266,6 +267,23 @@ public class Player : MonoBehaviour
         navMeshAgent.CalculatePath(agentPosition, path);
         var endPointIndex = path.corners.Length - 1;
         return path.corners[endPointIndex];
+    }
+
+    public void SetLostStatus()
+    {
+        _playerVisualization.OffAnimation();
+        OffRagDoll();
+    }
+
+    private void OffRagDoll()
+    {
+        foreach (Rigidbody rb in _ragDoll)
+        {
+            rb.isKinematic = false;
+        }
+        _cameraTarget.SetParent(null);
+        _catBody.isKinematic = false;
+        _catBody.AddForce(Vector3.up * 80, ForceMode.Impulse);
     }
 
 }

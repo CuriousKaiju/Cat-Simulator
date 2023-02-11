@@ -60,6 +60,15 @@ public class LevelController : MonoBehaviour
     {
         InitLevel();
         GetParamsAboutTheThings();
+
+        if (PlayerPrefs.HasKey("Current Level"))
+        {
+            TinySauce.OnGameStarted(PlayerPrefs.GetString("Current Level"));
+        }
+        else
+        {
+            TinySauce.OnGameStarted("Level_1");
+        }
     }
 
     private void InitLevel()
@@ -86,6 +95,16 @@ public class LevelController : MonoBehaviour
 
     public void StartNextLevel()
     {
+        if (PlayerPrefs.HasKey("Current Level"))
+        {
+            TinySauce.OnGameFinished(true, 0, PlayerPrefs.GetString("Current Level"));
+        }
+        else
+        {
+            TinySauce.OnGameFinished(true, 0, "Level_1");
+        }
+
+        PlayerPrefs.SetString("Current Level", _nextLevel);
         SceneManager.LoadScene(_nextLevel);
     }
 
