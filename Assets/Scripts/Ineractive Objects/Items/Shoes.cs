@@ -8,6 +8,8 @@ public class Shoes : InteractiveObject
 
     public override void ClearObject()
     {
+        GameEvents.OnPoop();
+
         _poop.SetActive(true);
         _collider.enabled = false;
         _interactionPoint.SetActive(false);
